@@ -52,7 +52,13 @@
       <tr>
         <th scope="row">{{id}}</th>
         <td>{{name}}</td>
-        <td>{{price}}</td>
+        <td>
+          {{#if current_price}}
+            <span style="text-decoration: line-through;">{{original_price}}</span> {{current_price}}
+          {{else}}
+            {{original_price}}
+          {{/if}}
+        </td>
       </tr>
     </script>
     <script type="text/javascript">
@@ -67,7 +73,14 @@
           const template = Handlebars.compile( source );
 
           const rows = response.roomtypes.map( function( roomtype ){
-            roomtype.price = '£' + (roomtype.price / 100);
+            if (roomtype.original_price == roomtype.current_price){
+              roomtype.original_price = '£' + (roomtype.original_price / 100);
+              roomtype.current_price = null;
+            } else {
+              roomtype.original_price = '£' + (roomtype.original_price / 100);
+              roomtype.current_price = '£' + (roomtype.current_price / 100);
+            }
+            console.log(roomtype);
             return template( roomtype );
           });
 

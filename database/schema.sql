@@ -36,4 +36,26 @@ CREATE TABLE rooms (
     sea_view     BOOLEAN
 );
 
+DROP TABLE IF EXISTS reservations;
+
+CREATE TABLE reservations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id INTEGER,
+    room_id INTEGER,
+    check_in_date DATE,
+    check_out_date DATE,
+    room_price INTEGER
+);
+
+DROP TABLE IF EXISTS reviews;
+
+CREATE TABLE reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id INTEGER,
+    room_type_id INTEGER,
+    rating INTEGER,
+    comment TEXT,
+    review_date DATE
+);
+
 INSERT INTO customers (title, firstname, surname, email) VALUES ('Mr.', 'Tom', 'Jones', 'tom@jones.com');
