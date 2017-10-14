@@ -56,16 +56,17 @@
     <script type="text/javascript">
       $('.fn-submit').on('click', function( event ){
         event.preventDefault();
-
+        console.log($('#invoiceDate').val());
+        console.log($('#paid').val());
         $.ajax({
           method: 'PUT',
           url: '/api/invoice?reservationId='+$('#reservationId').val(),
           data: JSON.stringify({
             invoice:{
               surcharges: +$('#surcharges').val(),
-              total:+$('#total').val(),
-              invoiceDate: +$('#invoiceDate').val(),
-              paid: +$('#paid').val(),
+              total: +$('#total').val(),
+              invoiceDate: $('#invoiceDate').val(),
+              paid: $('#paid').val(),
             }
           }),
           contentType: 'application/json',
