@@ -186,9 +186,14 @@ router.post('/reservations', function(req, res) {
 });
 
 router.get('/reservations', function(req, res) {
-  let condition = (req.query.id) ? `customer_id = ${req.query.id}` : `firstname LIKE \'%${req.query.name}%\'`;
+  res.header("Access-Control-Allow-Origin", "*");
 
-  let reservationQuerySql = `SELECT title, firstname, surname, email, room_id AS roomId, check_in_date AS checkInDate, check_out_date AS checkOutDate FROM reservations INNER JOIN customers ON customers.id = reservations.customer_id WHERE ${condition}`;
+  let condition = '';
+  condition += (req.query.id) ? `customer_id = ${req.query.id}` : '';
+  condition += (req.query.name) ? `firstname LIKE \'%${req.query.name}%\'` : '';
+  if (condition.length > 0) condition = 'WHERE ' + condition;
+
+  let reservationQuerySql = `SELECT reservations.id AS id, title, firstname AS firstName, surname, email, room_id AS roomId, check_in_date AS checkInDate, check_out_date AS checkOutDate FROM reservations INNER JOIN customers ON customers.id = reservations.customer_id ${condition}`;
 
   db.serialize(function() {
     db.all(reservationQuerySql, [], (err, rows) => {
@@ -201,7 +206,9 @@ router.get('/reservations', function(req, res) {
         row.checkOutDate = formatJSDate(row.checkOutDate);
         return row;
       });
-      res.status(200).json({ reservations: rowsReadable});
+      setTimeout(() => {
+        res.status(200).json({ reservations: rowsReadable});
+      }, 1000);
     });
   });
 });
